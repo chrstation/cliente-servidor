@@ -77,6 +77,7 @@ public class MenuCliente extends JFrame {
                         this.identificacion.getText());
                 db.guardarCliente(cliente);
                 this.dispose();
+                confirmarRegistro(cliente);
                 menuReservacion.setVisible(true);
             }
         });
@@ -84,10 +85,23 @@ public class MenuCliente extends JFrame {
         return agregar;
     }
 
+    private void confirmarRegistro(Cliente cliente) {
+        JOptionPane.showMessageDialog(this, "El cliente se ha agregado exitosamente:\n\n"
+                + "ID: " + cliente.getId() + "\n"
+                + "Nombre: " + cliente.getNombre() + "\n"
+                + "Apellidos: " + cliente.getApellidos() + "\n"
+                + "Identificación: " + cliente.getIdentificacion() + "\n"
+                + "Pais: " + cliente.getPais() + "\n"
+                + "Edad: " + cliente.getEdad() + "\n\n", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     private JButton configurarBotonCancelar() {
         JButton cancelar = new JButton("Cancelar");
         cancelar.addActionListener(event -> {
+            System.out.println("Evento");
             this.dispose();
+            this.setVisible(false);
+            System.out.println("Completadod");
         });
 
         return cancelar;
