@@ -1,4 +1,4 @@
-package rent.a.car.cliente.servidor;
+package rent.a.car.cliente.servidor.modelos;
 
 /**
  * Clientes.Constructores.
@@ -7,14 +7,14 @@ package rent.a.car.cliente.servidor;
  */
 public class Cliente {
 
-    private int id;
+    private Integer id;
     private int edad;
     private String pais;
     private String nombre;
     private String apellidos;
     private String identificacion;
 
-    public Cliente(String nombre, String apellidos, String pais, int edad, int id, String identificacion) {
+    public Cliente(Integer id, String nombre, String apellidos, String pais, int edad, String identificacion) {
         this.id = id;
         this.pais = pais;
         this.edad = edad;

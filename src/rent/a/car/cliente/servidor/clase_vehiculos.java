@@ -1,7 +1,6 @@
 package rent.a.car.cliente.servidor;
 
-import javax.swing.JOptionPane;
-import static rent.a.car.cliente.servidor.frames.MenuCliente.cliente;
+import rent.a.car.cliente.servidor.modelos.Vehiculo;
 //import static rent.a.car.cliente.servidor.ReservacionImpl.fecha;
 
 /**

@@ -6,9 +6,9 @@ package rent.a.car.cliente.servidor.db;
 
 import java.util.ArrayList;
 import java.util.List;
-import rent.a.car.cliente.servidor.Cliente;
+import rent.a.car.cliente.servidor.modelos.Cliente;
 import rent.a.car.cliente.servidor.ReservacionImpl;
-import rent.a.car.cliente.servidor.Vehiculo;
+import rent.a.car.cliente.servidor.modelos.Vehiculo;
 import rent.a.car.cliente.servidor.interfaces.Reservacion;
 
 /**
@@ -16,6 +16,9 @@ import rent.a.car.cliente.servidor.interfaces.Reservacion;
  * @author daniel.guzman
  */
 public class BaseDeDatosTemporal {
+
+    private int secuencia_id_cliente = 0;
+    private int secuencia_id_vehiculo = 0;
 
     /**
      * Abastracion de una Base de datos en memoria para gestionar la informacion
@@ -26,8 +29,8 @@ public class BaseDeDatosTemporal {
     private final List<Reservacion> reservaciones = new ArrayList<>();
 
     public BaseDeDatosTemporal() {
-        clientes.add(new Cliente("Carlos", "Charlie", "Costa Rica", 20, 1, "1-234-56-789"));
-        clientes.add(new Cliente("Daniel", "Guzman", "Costa Rica", 20, 2, "1-234-56-789"));
+        clientes.add(new Cliente(secuencia_id_cliente++, "Carlos", "Charlie", "Costa Rica", 20, "1-234-56-789"));
+        clientes.add(new Cliente(secuencia_id_cliente++, "Daniel", "Guzman", "Costa Rica", 20, "1-234-56-789"));
 
         vehiculos.add(new Vehiculo("Honda", "Accord", 2017, "HHK-909", "D"));
         vehiculos.add(new Vehiculo("Honda", "Civic", 2021, "KMM-788", "D"));
@@ -40,12 +43,15 @@ public class BaseDeDatosTemporal {
         vehiculos.add(new Vehiculo("Mazda", "Cx5", 2017, "SFR-911", "D"));
     }
 
-    public void guardarCliente(Cliente cliente) {
+    public Cliente guardarCliente(Cliente cliente) {
+        cliente.setId(secuencia_id_cliente++);
         clientes.add(cliente);
+        return cliente;
     }
 
-    public void guardarVehiculo(Vehiculo vehiculo) {
+    public Vehiculo guardarVehiculo(Vehiculo vehiculo) {
         vehiculos.add(vehiculo);
+        return vehiculo;
     }
 
     public void guardarReservacion(ReservacionImpl reservacion) {

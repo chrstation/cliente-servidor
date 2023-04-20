@@ -6,98 +6,118 @@ package rent.a.car.cliente.servidor.frames;
  */
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import rent.a.car.cliente.servidor.Cliente;
+import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.modelos.Cliente;
+import rent.a.car.cliente.servidor.util.StringUtil;
 
-public class MenuCliente extends JFrame implements ActionListener {
+public class MenuCliente extends JFrame {
 
-    private final JTextField id;
-    private final JTextField nombre;
-    private final JTextField pais;
-    private final JTextField edad;
-    private final JButton agregar;
-    private final JPanel inputPanel;
-    private final JPanel outputPanel;
-    private final JTextArea outputArea;
-    private final JScrollPane scrollPane;
+    private final JFrame menuReservacion;
+    private final BaseDeDatosTemporal db;
 
-    public static Cliente[] cliente;
+    private static final String PAIS = "País";
+    private static final String EDAD = "Edad";
+    private static final String NOMBRE = "Nombre";
+    private static final String APELLIDOS = "Apellidos";
+    private static final String IDENTIFICACION = "Identificación";
+    private static final String DATO_INVALIDO = "Datos incorrectos";
 
-    public JTextField getId() {
-        return this.id;
-    }
+    private final JTextField nombre = new JTextField(10);
+    private final JTextField pais = new JTextField(10);
+    private final JTextField edad = new JTextField(10);
+    private final JTextField apellidos = new JTextField(20);
+    private final JTextField identificacion = new JTextField(10);
 
-    public MenuCliente() {
+    public MenuCliente(BaseDeDatosTemporal db, JFrame menuReservacion) {
         super("Nuevo Cliente");
 
-        cliente = new Cliente[1];
+        this.db = db;
+        this.menuReservacion = menuReservacion;
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 210);
+        setLocationRelativeTo(null);
+        configurarInterfaz();
+    }
 
-        id = new JTextField(10);
-        nombre = new JTextField(10);
-        pais = new JTextField(10);
-        edad = new JTextField(10);
+    private void configurarInterfaz() {
+        JPanel inputPanel = configurarCamposEntrada();
 
-        agregar = new JButton("Agregar");
-        agregar.addActionListener(this);
-
-        inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(4, 2));
-        inputPanel.add(new JLabel("ID:"));
-        inputPanel.add(id);
-        inputPanel.add(new JLabel("Nombre:"));
-        inputPanel.add(nombre);
-        inputPanel.add(new JLabel("Pais:"));
-        inputPanel.add(pais);
-        inputPanel.add(new JLabel("Edad:"));
-        inputPanel.add(edad);
-
-        outputArea = new JTextArea(10, 30);
-        outputArea.setEditable(false);
-        scrollPane = new JScrollPane(outputArea);
-
-        outputPanel = new JPanel();
-        outputPanel.add(scrollPane);
+        JButton agregar = configurarBotonRegistrar();
+        JButton cancelar = configurarBotonCancelar();
+        inputPanel.add(cancelar);
+        inputPanel.add(agregar);
 
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(inputPanel, BorderLayout.NORTH);
-        contentPane.add(agregar, BorderLayout.CENTER);
-        contentPane.add(outputPanel, BorderLayout.SOUTH);
-
-        pack();
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == agregar) {
-//            int id = Integer.parseInt(this.id.getText());
-//            String nombre = this.nombre.getText();
-//            String pais = this.pais.getText();
-//            int edad = Integer.parseInt(this.edad.getText());
-//
-//            for (int i = 0; i < cliente.length; i++) {
-//                if (cliente[i] == null) {
-//                    cliente[i] = new Cliente(nombre, pais, edad, id);
-//                    outputArea.append("El cliente se ha agregado exitosamente\n"
-//                            + "Nombre: " + cliente[i].nombre + "\n"
-//                            + "Identificación: " + cliente[i].Id + "\n"
-//                            + "Pais: " + cliente[i].Pais + "\n"
-//                            + "Edad: " + cliente[i].Edad + "\n\n");
-//                    break;
-//                }
-//            }
-//            this.id.setText("");
-//            this.nombre.setText("");
-//            this.pais.setText("");
-//            this.edad.setText("");
-//        }
-        throw new UnsupportedOperationException("Aun no esta implementado");
+    private JPanel configurarCamposEntrada() {
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(6, 2));
+        inputPanel.add(new JLabel("   " + IDENTIFICACION + ":"));
+        inputPanel.add(identificacion);
+        inputPanel.add(new JLabel("   " + NOMBRE + ":"));
+        inputPanel.add(nombre);
+        inputPanel.add(new JLabel("   " + APELLIDOS + ":"));
+        inputPanel.add(apellidos);
+        inputPanel.add(new JLabel("   " + PAIS + ":"));
+        inputPanel.add(pais);
+        inputPanel.add(new JLabel("   " + EDAD + ":"));
+        inputPanel.add(edad);
+        return inputPanel;
     }
 
-    public static void main(String[] args) {
-        MenuCliente frame = new MenuCliente();
-        frame.setVisible(true);
+    private JButton configurarBotonRegistrar() {
+        JButton agregar = new JButton("Registrar");
+        agregar.addActionListener(event -> {
+            if (validarEntradas()) {
+                Cliente cliente = new Cliente(null, this.nombre.getText(), this.apellidos.getText(),
+                        this.pais.getText(), Integer.parseInt(this.edad.getText()),
+                        this.identificacion.getText());
+                db.guardarCliente(cliente);
+                this.dispose();
+                menuReservacion.setVisible(true);
+            }
+        });
+
+        return agregar;
+    }
+
+    private JButton configurarBotonCancelar() {
+        JButton cancelar = new JButton("Cancelar");
+        cancelar.addActionListener(event -> {
+            this.dispose();
+        });
+
+        return cancelar;
+    }
+
+    private boolean validarEntradas() {
+        boolean entradasValidas = true;
+        String formatoMensaje = "El campo \"%s\" es invalido";
+
+        if (StringUtil.isEmpty(this.identificacion.getText())) {
+            entradasValidas = false;
+            JOptionPane.showMessageDialog(this, String.format(formatoMensaje, IDENTIFICACION), DATO_INVALIDO, JOptionPane.ERROR_MESSAGE);
+        } else if (StringUtil.isEmpty(this.nombre.getText())) {
+            entradasValidas = false;
+            JOptionPane.showMessageDialog(this, String.format(formatoMensaje, NOMBRE), DATO_INVALIDO, JOptionPane.ERROR_MESSAGE);
+        } else if (StringUtil.isEmpty(this.apellidos.getText())) {
+            entradasValidas = false;
+            JOptionPane.showMessageDialog(this, String.format(formatoMensaje, APELLIDOS), DATO_INVALIDO, JOptionPane.ERROR_MESSAGE);
+        } else if (StringUtil.isEmpty(this.pais.getText())) {
+            entradasValidas = false;
+            JOptionPane.showMessageDialog(this, String.format(formatoMensaje, PAIS), DATO_INVALIDO, JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Integer.valueOf(this.edad.getText());
+            } catch (NumberFormatException numberFormatException) {
+                entradasValidas = false;
+                JOptionPane.showMessageDialog(this, String.format(formatoMensaje, EDAD), DATO_INVALIDO, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return entradasValidas;
     }
 }

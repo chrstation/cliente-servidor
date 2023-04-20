@@ -3,14 +3,13 @@ package rent.a.car.cliente.servidor.frames;
 import javax.swing.JOptionPane;
 
 /**
- * Menu principal: se usan switch, while y submenus con dialogos
+ * Menu principal
  *
  * @author Charlie
  */
 import javax.swing.*;
 import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
 import rent.a.car.cliente.servidor.ReservacionImpl;
-import rent.a.car.cliente.servidor.clase_vehiculos;
 
 public class MenuPrincipal extends JFrame {
 

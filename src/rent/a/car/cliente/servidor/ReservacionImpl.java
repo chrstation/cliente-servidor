@@ -1,24 +1,7 @@
 package rent.a.car.cliente.servidor;
 
 import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
-import rent.a.car.cliente.servidor.frames.MenuCliente;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Optional;
-import javax.swing.JButton;
-import static rent.a.car.cliente.servidor.clase_vehiculos.arreglo;
-import static rent.a.car.cliente.servidor.frames.MenuCliente.cliente;
-
-/**
- *
- * @author Charlie
- */
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import rent.a.car.cliente.servidor.interfaces.Reservacion;
 
 public class ReservacionImpl implements Reservacion {
