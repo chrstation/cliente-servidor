@@ -43,8 +43,6 @@ public class ReservacionImpl implements Reservacion {
 //            int dias = Integer.parseInt(JOptionPane.showInputDialog("Escriba la cantidad de días a reservar: "));
 //            int numero_reserva = 1;
 //
-//            //aqui este mae esta agregando el valor del field directamente de un campo estatico entonces obvio no le va a bretiar
-//            //para diversas iteraciones, necesita una nueva instancia.
 //            MenuCliente clientFrame = new MenuCliente();
 //            JTextField id = clientFrame.getId();
 //            String numero_vehiculo = "";
@@ -53,8 +51,6 @@ public class ReservacionImpl implements Reservacion {
 //            int seguro = 0;
 //            int precio = 0;
 //
-////            este mae lo esta metiendo a un arreglo de reservaciones, pero esta siendo gestionado desde dentro de la misma clase
-////esto tiene que venir de algun lugar ya sea de la memoria o de una base de datos
 //            fecha[x] = new ReservacionImpl(dias, numero_reserva, id, numero_vehiculo, monto_total, deposito, seguro, precio);
 //        }
 //
