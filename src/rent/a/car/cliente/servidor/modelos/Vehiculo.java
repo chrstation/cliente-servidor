@@ -1,4 +1,4 @@
-package rent.a.car.cliente.servidor;
+package rent.a.car.cliente.servidor.modelos;
 
 /**
  * Constructores de los vehiculos.
