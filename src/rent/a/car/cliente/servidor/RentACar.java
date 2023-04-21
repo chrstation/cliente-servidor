@@ -1,8 +1,9 @@
 package rent.a.car.cliente.servidor;
 
+import java.sql.Connection;
 import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.db.Conexion;
 import rent.a.car.cliente.servidor.frames.MenuPrincipal;
-import static rent.a.car.cliente.servidor.clase_vehiculos.arreglo;
 
 /**
  * Clase main: se usan arreglos predefinidos, se usaron fuera de la clases para
@@ -13,6 +14,7 @@ import static rent.a.car.cliente.servidor.clase_vehiculos.arreglo;
 public class RentACar {
 
     public static void main(String[] args) {
+        Connection conn = Conexion.getConexion();
         BaseDeDatosTemporal db = new BaseDeDatosTemporal();
         MenuPrincipal menuPrincipal = new MenuPrincipal(db);
         menuPrincipal.mostrar();
