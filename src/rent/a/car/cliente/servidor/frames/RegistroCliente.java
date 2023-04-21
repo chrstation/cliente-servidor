@@ -7,13 +7,16 @@ package rent.a.car.cliente.servidor.frames;
 import javax.swing.*;
 import java.awt.*;
 import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.interfaces.ServicioCliente;
 import rent.a.car.cliente.servidor.modelos.Cliente;
+import rent.a.car.cliente.servidor.servicios.ServicioClienteImpl;
 import rent.a.car.cliente.servidor.util.StringUtil;
 
-public class MenuCliente extends JFrame {
+public class RegistroCliente extends JFrame {
 
     private final JFrame menuReservacion;
     private final BaseDeDatosTemporal db;
+    private final ServicioCliente servicioCliente;
 
     private static final String PAIS = "País";
     private static final String EDAD = "Edad";
@@ -28,18 +31,21 @@ public class MenuCliente extends JFrame {
     private final JTextField apellidos = new JTextField(20);
     private final JTextField identificacion = new JTextField(10);
 
-    public MenuCliente(BaseDeDatosTemporal db, JFrame menuReservacion) {
+    public RegistroCliente(BaseDeDatosTemporal db, JFrame menuReservacion) {
         super("Nuevo Cliente");
 
         this.db = db;
         this.menuReservacion = menuReservacion;
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 210);
-        setLocationRelativeTo(null);
+        this.servicioCliente = new ServicioClienteImpl(db);
+
         configurarInterfaz();
     }
 
     private void configurarInterfaz() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 210);
+        setLocationRelativeTo(null);
+
         JPanel inputPanel = configurarCamposEntrada();
 
         JButton agregar = configurarBotonRegistrar();
@@ -72,10 +78,9 @@ public class MenuCliente extends JFrame {
         JButton agregar = new JButton("Registrar");
         agregar.addActionListener(event -> {
             if (validarEntradas()) {
-                Cliente cliente = new Cliente(null, this.nombre.getText(), this.apellidos.getText(),
+                Cliente cliente = servicioCliente.crear(new Cliente(null, this.nombre.getText(), this.apellidos.getText(),
                         this.pais.getText(), Integer.parseInt(this.edad.getText()),
-                        this.identificacion.getText());
-                db.guardarCliente(cliente);
+                        this.identificacion.getText()));
                 this.dispose();
                 confirmarRegistro(cliente);
                 menuReservacion.setVisible(true);
@@ -98,10 +103,8 @@ public class MenuCliente extends JFrame {
     private JButton configurarBotonCancelar() {
         JButton cancelar = new JButton("Cancelar");
         cancelar.addActionListener(event -> {
-            System.out.println("Evento");
             this.dispose();
             this.setVisible(false);
-            System.out.println("Completadod");
         });
 
         return cancelar;

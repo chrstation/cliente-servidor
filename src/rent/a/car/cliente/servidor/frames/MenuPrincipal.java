@@ -9,16 +9,13 @@ import javax.swing.JOptionPane;
  */
 import javax.swing.*;
 import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
-import rent.a.car.cliente.servidor.ReservacionImpl;
 
 public class MenuPrincipal extends JFrame {
 
-    private final ReservacionImpl reservacion;
     private final BaseDeDatosTemporal db;
 
     public MenuPrincipal(BaseDeDatosTemporal db) {
         this.db = db;
-        this.reservacion = new ReservacionImpl(db);
         configuraInterfaz();
     }
 
@@ -59,21 +56,9 @@ public class MenuPrincipal extends JFrame {
 
     private void nuevoAlquilerActionListener(JButton nuevoAlquiler) {
         nuevoAlquiler.addActionListener(e -> {
-//            MenuCliente frame = new MenuCliente();
-//            frame.setVisible(true);
-
-            MenuReservacion menuReservacion = new MenuReservacion(db);
+            this.setVisible(false);
+            MenuReservacion menuReservacion = new MenuReservacion(db, this);
             menuReservacion.setVisible(true);
-
-//            clase_vehiculos reserva_vehiculo = new clase_vehiculos();
-//            reserva_vehiculo.eleccion_vehiculo();
-//            
-//            int input = JOptionPane.showConfirmDialog(null, "Desea realizar otra reservación");
-//            
-//            if (input == 1) {
-//                JOptionPane.showMessageDialog(null, "Muchas Gracias!");
-//                dispose();
-//            }
         });
     }
 
@@ -88,16 +73,13 @@ public class MenuPrincipal extends JFrame {
 
             switch (respuesta) {
                 case 1:
-                    reservacion.devolucion();
-                    break;
+                    throw new UnsupportedOperationException("No implementado");
 
                 case 2:
-                    reservacion.eliminar(0);
-                    break;
+                    throw new UnsupportedOperationException("No implementado");
 
                 case 3:
-                    reservacion.modificar(null);
-                    break;
+                    throw new UnsupportedOperationException("No implementado");
 
                 case 4:
                     dispose();
@@ -113,7 +95,7 @@ public class MenuPrincipal extends JFrame {
 
     private void salirActionListener(JButton salir) {
         salir.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Gracias, vuelva pronto!");
+            JOptionPane.showMessageDialog(this, "Gracias, vuelva pronto!", "Adios", JOptionPane.INFORMATION_MESSAGE);
             dispose();
             System.exit(0);
         });
