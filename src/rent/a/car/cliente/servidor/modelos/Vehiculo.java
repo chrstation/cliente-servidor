@@ -1,25 +1,19 @@
-package rent.a.car.cliente.servidor;
+package rent.a.car.cliente.servidor.modelos;
 
-/**Constructores de los vehiculos.
+/**
+ * Constructores de los vehiculos.
  *
  * @author Charlie
  */
-public class Vehiculos {
-    
-    
-    
+public class Vehiculo {
+
+    public int Año;
     public String Marca;
     public String Modelo;
-    public int Año;
     public String Placa;
     public String Reserva;
-    
-    
-    
-    
-    
-    public Vehiculos(String marca, String modelo, int año, String placa, String reserva)
-    {
+
+    public Vehiculo(String marca, String modelo, int año, String placa, String reserva) {
         this.Marca = marca;
         this.Modelo = modelo;
         this.Año = año;
