@@ -12,7 +12,7 @@ import rent.a.car.cliente.servidor.modelos.Reservacion;
 
 /**
  *
- * @author daniel.guzman
+ * @author Charlie
  */
 public class BaseDeDatosTemporal {
 

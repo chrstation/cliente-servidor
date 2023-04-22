@@ -13,7 +13,7 @@ import rent.a.car.cliente.servidor.modelos.Reservacion;
 /**
  * Impl significa implementacion, por que implementa una interfaz
  *
- * @author daniel.guzman
+ * @author Charlie.guzman
  */
 public class ServicioReservacionImpl implements ServicioReservacion {
 

@@ -95,7 +95,7 @@ public class MenuPrincipal extends JFrame {
 
     private void salirActionListener(JButton salir) {
         salir.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Gracias, vuelva pronto!", "Adios", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Gracias, vuelva pronto!", "Hasta luego", JOptionPane.INFORMATION_MESSAGE);
             dispose();
             System.exit(0);
         });
