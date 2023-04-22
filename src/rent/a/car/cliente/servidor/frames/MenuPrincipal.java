@@ -1,5 +1,7 @@
 package rent.a.car.cliente.servidor.frames;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -8,14 +10,11 @@ import javax.swing.JOptionPane;
  * @author Charlie
  */
 import javax.swing.*;
-import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 
 public class MenuPrincipal extends JFrame {
 
-    private final BaseDeDatosTemporal db;
-
-    public MenuPrincipal(BaseDeDatosTemporal db) {
-        this.db = db;
+    public MenuPrincipal() {
         configuraInterfaz();
     }
 
@@ -56,9 +55,15 @@ public class MenuPrincipal extends JFrame {
 
     private void nuevoAlquilerActionListener(JButton nuevoAlquiler) {
         nuevoAlquiler.addActionListener(e -> {
-            this.setVisible(false);
-            MenuReservacion menuReservacion = new MenuReservacion(db, this);
-            menuReservacion.setVisible(true);
+            try {
+                MenuReservacion menuReservacion = new MenuReservacion(this);
+                menuReservacion.setVisible(true);
+                this.setVisible(false);
+            } catch (ErrorConexionBaseDeDatos ex) {
+                System.err.println("Error configurando menu reservacion. Mensaje: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error configurando menu de reservacion, por favor intentelo de nuevo mas tarde",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
     }
 

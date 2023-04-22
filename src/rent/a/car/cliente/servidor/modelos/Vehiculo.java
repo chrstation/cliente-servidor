@@ -9,12 +9,12 @@ public class Vehiculo {
 
     public Integer id;
     public int annio;
-    public int precio;
+    public double precio;
     public String marca;
     public String modelo;
     public String placa;
 
-    public Vehiculo(Integer id, String marca, String modelo, int annio, String placa, int precio) {
+    public Vehiculo(Integer id, String marca, String modelo, int annio, String placa, double precio) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -55,11 +55,11 @@ public class Vehiculo {
         this.placa = placa;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

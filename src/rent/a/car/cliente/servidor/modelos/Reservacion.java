@@ -12,11 +12,11 @@ public class Reservacion {
 
     private Integer id;
     private int dias;
-    private int costo;
+    private double costo;
     private int vehiculo_fk;
     private int cliente_fk;
 
-    public Reservacion(Integer id, int dias, int costo, int vehiculo_fk, int cliente_fk) {
+    public Reservacion(Integer id, int dias, double costo, int vehiculo_fk, int cliente_fk) {
         this.id = id;
         this.dias = dias;
         this.costo = costo;
@@ -40,11 +40,11 @@ public class Reservacion {
         this.dias = dias;
     }
 
-    public int getCosto() {
+    public double getCosto() {
         return costo;
     }
 
-    public void setCosto(int costo) {
+    public void setCosto(double costo) {
         this.costo = costo;
     }
 
