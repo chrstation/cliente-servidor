@@ -60,7 +60,6 @@ public class MenuReservacion extends JFrame {
                 .map(cliente -> (cliente.getNombre() + " " + cliente.getApellidos())).collect(Collectors.toList()).toArray());
         listaClientes.setPrototypeDisplayValue(NO_HAY_CLIENTES_DEFAULT);
         panel.add(listaClientes);
-
         if (listaClientes.getItemCount() > 0) {
             listaClientes.setSelectedIndex(0);
         } else {
@@ -91,7 +90,6 @@ public class MenuReservacion extends JFrame {
         db.getClientes().stream()
                 .map(cliente -> (cliente.getNombre() + " " + cliente.getApellidos())).forEach(cliente -> listaClientes.addItem(cliente));
         listaClientes.setSelectedIndex(listaClientes.getItemCount() - 1);
-
         super.setVisible(b);
     }
 }
