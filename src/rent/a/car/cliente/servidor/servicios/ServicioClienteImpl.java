@@ -8,7 +8,7 @@ import rent.a.car.cliente.servidor.modelos.Cliente;
 
 /**
  *
- * @author daniel.guzman
+ * @author Charlie
  */
 public class ServicioClienteImpl implements ServicioCliente {
 
