@@ -6,7 +6,7 @@ package rent.a.car.cliente.servidor.excepciones;
 
 /**
  *
- * @author daniel.guzman
+ * @author Charlie
  */
 public class ReservacionInexistente extends Exception {
 

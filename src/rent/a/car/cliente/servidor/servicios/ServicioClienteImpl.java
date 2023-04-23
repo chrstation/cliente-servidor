@@ -16,7 +16,7 @@ import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 
 /**
  *
- * @author daniel.guzman
+ * @author Charlie
  */
 public class ServicioClienteImpl implements ServicioCliente {
 

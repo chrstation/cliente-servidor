@@ -48,7 +48,7 @@ public class MenuReservacion extends JFrame {
 
         configurarListaClientes(panel);
 
-        JButton nuevoCliente = new JButton("Regsitrar nuevo cliente");
+        JButton nuevoCliente = new JButton("Registrar nuevo cliente");
         nuevoClienteActionListener(nuevoCliente);
         panel.add(nuevoCliente);
 
