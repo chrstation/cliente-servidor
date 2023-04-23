@@ -13,8 +13,9 @@ import rent.a.car.cliente.servidor.frames.MenuPrincipal;
  */
 public class RentACar {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Connection conn = Conexion.getConexion();
+
         BaseDeDatosTemporal db = new BaseDeDatosTemporal();
         MenuPrincipal menuPrincipal = new MenuPrincipal(db);
         menuPrincipal.mostrar();

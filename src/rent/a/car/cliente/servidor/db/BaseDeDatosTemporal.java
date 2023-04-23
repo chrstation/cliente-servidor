@@ -7,18 +7,18 @@ package rent.a.car.cliente.servidor.db;
 import java.util.ArrayList;
 import java.util.List;
 import rent.a.car.cliente.servidor.modelos.Cliente;
-import rent.a.car.cliente.servidor.ReservacionImpl;
 import rent.a.car.cliente.servidor.modelos.Vehiculo;
-import rent.a.car.cliente.servidor.interfaces.Reservacion;
+import rent.a.car.cliente.servidor.modelos.Reservacion;
 
 /**
  *
- * @author daniel.guzman
+ * @author Charlie
  */
 public class BaseDeDatosTemporal {
 
     private int secuencia_id_cliente = 0;
     private int secuencia_id_vehiculo = 0;
+    private int secuencia_id_reservacion = 0;
 
     /**
      * Abastracion de una Base de datos en memoria para gestionar la informacion
@@ -32,15 +32,15 @@ public class BaseDeDatosTemporal {
         clientes.add(new Cliente(secuencia_id_cliente++, "Carlos", "Charlie", "Costa Rica", 20, "1-234-56-789"));
         clientes.add(new Cliente(secuencia_id_cliente++, "Daniel", "Guzman", "Costa Rica", 20, "1-234-56-789"));
 
-        vehiculos.add(new Vehiculo("Honda", "Accord", 2017, "HHK-909", "D"));
-        vehiculos.add(new Vehiculo("Honda", "Civic", 2021, "KMM-788", "D"));
-        vehiculos.add(new Vehiculo("Hyundai", "Elantra", 2018, "VDH-888", "D"));
-        vehiculos.add(new Vehiculo("Hyundai", "Santa Fe", 2021, "CHH-911", "D"));
-        vehiculos.add(new Vehiculo("Nissan", "Sentra", 2018, "MNM-546", "D"));
-        vehiculos.add(new Vehiculo("Lexus", "Rx350", 2021, "JVV-109", "D"));
-        vehiculos.add(new Vehiculo("Toyota", "Corona", 2019, "LLG-777", "D"));
-        vehiculos.add(new Vehiculo("Toyota", "4Runner", 2021, "WWW-434", "D"));
-        vehiculos.add(new Vehiculo("Mazda", "Cx5", 2017, "SFR-911", "D"));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Honda", "Accord", 2017, "HHK-909", 10000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Honda", "Civic", 2021, "KMM-788", 15000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Hyundai", "Elantra", 2018, "VDH-888", 10000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Hyundai", "Santa Fe", 2021, "CHH-911", 15000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Nissan", "Sentra", 2018, "MNM-546", 10000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Lexus", "Rx350", 2021, "JVV-109", 15000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Toyota", "Corona", 2019, "LLG-777", 10000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Toyota", "4Runner", 2021, "WWW-434", 15000));
+        vehiculos.add(new Vehiculo(secuencia_id_vehiculo++, "Mazda", "Cx5", 2017, "SFR-911", 10000));
     }
 
     public Cliente guardarCliente(Cliente cliente) {
@@ -54,8 +54,10 @@ public class BaseDeDatosTemporal {
         return vehiculo;
     }
 
-    public void guardarReservacion(ReservacionImpl reservacion) {
+    public Reservacion guardarReservacion(Reservacion reservacion) {
+        reservacion.setId(secuencia_id_reservacion++);
         reservaciones.add(reservacion);
+        return reservacion;
     }
 
     public List<Cliente> getClientes() {

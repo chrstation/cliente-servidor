@@ -11,22 +11,22 @@ package rent.a.car.cliente.servidor.db;
 import java.sql.*;
 
 public class Conexion {
-    
+
     private static Connection conn;
-    
-    public static Connection getConexion() {
+
+    public static Connection getConexion() throws Exception {
         try {
             if (conn == null) {
                 String url = "jdbc:mysql://localhost:3306/rent_a_car";
-                String user = "root"; // Reemplaza con el nombre de usuario de MySQL
-                String password = "rootroot"; // Reemplaza con la contraseña de MySQL
+                String user = "rentacar"; // Reemplaza con el nombre de usuario de MySQL
+                String password = "rentacar"; // Reemplaza con la contraseña de MySQL
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = DriverManager.getConnection(url, user, password);
             }
             return conn;
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error al conectar a la base de datos: " + e.getMessage());
-            return null;
+            throw e;
         }
     }
 }
