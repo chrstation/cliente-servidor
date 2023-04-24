@@ -12,12 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 import rent.a.car.cliente.servidor.interfaces.ServicioReservacion;
+import rent.a.car.cliente.servidor.interfaces.ServicioVehiculo;
 import rent.a.car.cliente.servidor.modelos.Cliente;
 import rent.a.car.cliente.servidor.modelos.Reservacion;
 import rent.a.car.cliente.servidor.modelos.Vehiculo;
 import rent.a.car.cliente.servidor.servicios.ServicioReservacionImpl;
+import rent.a.car.cliente.servidor.servicios.ServicioVehiculoImpl;
 import rent.a.car.cliente.servidor.util.StringUtil;
 
 /**
@@ -31,18 +33,18 @@ public class RegistroReservacion extends JFrame {
 
     private final Cliente cliente;
     private final JFrame menuPrincipal;
-    private final BaseDeDatosTemporal db;
+    private final ServicioVehiculo servicioVehiculo;
     private final ServicioReservacion servicioReservacion;
 
-    public RegistroReservacion(BaseDeDatosTemporal db, Cliente cliente, JFrame menuPrincipal) {
-        this.db = db;
+    public RegistroReservacion(Cliente cliente, JFrame menuPrincipal) throws ErrorConexionBaseDeDatos {
         this.cliente = cliente;
         this.menuPrincipal = menuPrincipal;
-        this.servicioReservacion = new ServicioReservacionImpl(db);
+        this.servicioVehiculo = new ServicioVehiculoImpl();
+        this.servicioReservacion = new ServicioReservacionImpl();
         configurarInterfaz();
     }
 
-    private void configurarInterfaz() {
+    private void configurarInterfaz() throws ErrorConexionBaseDeDatos {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 200);
         setLocationRelativeTo(null);
@@ -51,14 +53,14 @@ public class RegistroReservacion extends JFrame {
 
         JTextField dias = new JTextField(3);
         JCheckBox agregarSeguro = new JCheckBox("Incluir seguro", true);
-        JComboBox listaVehiculos = new JComboBox(db.getVehiculos().stream()
+        JComboBox listaVehiculos = new JComboBox(servicioVehiculo.consultarVehiculosDisponibles().stream()
                 .map(vehiculo -> concatenarDescVehiculo(vehiculo)).collect(Collectors.toList()).toArray());
         listaVehiculos.setPrototypeDisplayValue(NO_HAY_VEHICULOS_DEFAULT);
         JPanel comboPanel = configurarComboPanel(listaVehiculos, agregarSeguro, dias);
 
         JButton reservar = configurarBotonReservar(listaVehiculos, agregarSeguro, dias);
         JButton cancelar = configurarBotonCancelar();
-        configurarListaVehiculos(listaVehiculos, reservar);
+        configurarListaVehiculos(listaVehiculos, reservar, agregarSeguro);
 
         JPanel botones = new JPanel();
         botones.add(cancelar);
@@ -104,29 +106,15 @@ public class RegistroReservacion extends JFrame {
         JButton reservar = new JButton("Reservar");
         reservar.addActionListener(event -> {
             if (validarDatosEntrada(dias)) {
-                Vehiculo vehiculo = db.getVehiculos().get(listaVehiculos.getSelectedIndex());
-                int seguro = agregarSeguro.isSelected() ? MONTO_SEGURO : 0;
-                int diasInt = Integer.parseInt(dias.getText());
-                int costo = ((diasInt * vehiculo.precio) + seguro);
-
-                String mensajeConfirmacion = "Datos de la reservación:\n\n"
-                        + "- Precio vehiculo: $" + vehiculo.getPrecio() + "\n"
-                        + "- Costo seguro: $" + seguro + "\n"
-                        + "- Cantidad de dias: " + dias.getText() + "\n"
-                        + "-------------------------\n"
-                        + "Costo total: $" + costo;
-                int respuesta = JOptionPane.showConfirmDialog(this, mensajeConfirmacion,
-                        "Confirmar reservacion", JOptionPane.YES_NO_OPTION);
-
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    servicioReservacion.crear(new Reservacion(null, diasInt, costo, vehiculo.getId(), cliente.getId()));
-                    JOptionPane.showMessageDialog(this, "Reservacion registrada exsitosamente",
-                            "Reservacion registrada", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                    menuPrincipal.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Reservacion cancelada",
-                            "Reservacion cancelada", JOptionPane.WARNING_MESSAGE);
+                try {
+                    Vehiculo vehiculo = servicioVehiculo.consultarVehiculosDisponibles().get(listaVehiculos.getSelectedIndex());
+                    int seguro = agregarSeguro.isSelected() ? MONTO_SEGURO : 0;
+                    int diasInt = Integer.parseInt(dias.getText());
+                    double costo = ((diasInt * vehiculo.getPrecio()) + seguro);
+                    mostrarMensajeConfirmacion(vehiculo, seguro, diasInt, costo);
+                } catch (ErrorConexionBaseDeDatos ex) {
+                    System.err.println("Error registrando consultado lista vehiculos. Mensaje: " + ex.getMessage());
+                    mostrarErrorRegistroReservacion();
                 }
             }
         });
@@ -142,10 +130,13 @@ public class RegistroReservacion extends JFrame {
                 Integer.parseInt(dias.getText());
             } catch (NumberFormatException numberFormatException) {
                 valido = false;
-                JOptionPane.showMessageDialog(this, "El campo \"dias\" no es valido", "Formato incorrecto", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             valido = false;
+        }
+
+        if (!valido) {
+            JOptionPane.showMessageDialog(this, "El campo \"dias\" no es valido", "Formato incorrecto", JOptionPane.ERROR_MESSAGE);
         }
 
         return valido;
@@ -160,7 +151,7 @@ public class RegistroReservacion extends JFrame {
         return cancelar;
     }
 
-    private void configurarListaVehiculos(JComboBox listaVehiculos, JButton reservar) {
+    private void configurarListaVehiculos(JComboBox listaVehiculos, JButton reservar, JCheckBox seguro) {
         if (listaVehiculos.getItemCount() > 0) {
             listaVehiculos.setSelectedIndex(0);
         } else {
@@ -171,7 +162,42 @@ public class RegistroReservacion extends JFrame {
 
 //            Deshabilita el boton reservar por que no hay vehiculos.
             reservar.setEnabled(false);
+            seguro.setEnabled(false);
         }
+    }
+
+    private void mostrarMensajeConfirmacion(Vehiculo vehiculo, int seguro, int dias, double costo) {
+        String mensajeConfirmacion = "Datos de la reservación:\n\n"
+                + "- Precio vehiculo: $" + vehiculo.getPrecio() + "\n"
+                + "- Costo seguro: $" + seguro + "\n"
+                + "- Cantidad de dias: " + dias + "\n"
+                + "-------------------------\n"
+                + "Costo total: $" + costo;
+        int respuesta = JOptionPane.showConfirmDialog(this, mensajeConfirmacion,
+                "Confirmar reservacion", JOptionPane.YES_NO_OPTION);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            this.dispose();
+
+            try {
+                servicioReservacion.crear(new Reservacion(null, dias, costo, vehiculo.getId(), cliente.getId()));
+                JOptionPane.showMessageDialog(this, "Reservacion registrada exitosamente",
+                        "Reservacion registrada", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IllegalArgumentException | ErrorConexionBaseDeDatos ex) {
+                System.err.println("Error registrando reservacion. Mensaje: " + ex.getMessage());
+                mostrarErrorRegistroReservacion();
+            } finally {
+                menuPrincipal.setVisible(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Reservacion cancelada",
+                    "Reservacion cancelada", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void mostrarErrorRegistroReservacion() {
+        JOptionPane.showMessageDialog(this, "Error registrando reservacion, por favor intentelo de nuevo mas tarde",
+                "Reservacion registrada", JOptionPane.ERROR_MESSAGE);
     }
 
 }

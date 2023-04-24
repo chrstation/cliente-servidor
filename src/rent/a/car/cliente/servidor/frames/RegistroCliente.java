@@ -6,7 +6,7 @@ package rent.a.car.cliente.servidor.frames;
  */
 import javax.swing.*;
 import java.awt.*;
-import rent.a.car.cliente.servidor.db.BaseDeDatosTemporal;
+import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 import rent.a.car.cliente.servidor.interfaces.ServicioCliente;
 import rent.a.car.cliente.servidor.modelos.Cliente;
 import rent.a.car.cliente.servidor.servicios.ServicioClienteImpl;
@@ -15,7 +15,6 @@ import rent.a.car.cliente.servidor.util.StringUtil;
 public class RegistroCliente extends JFrame {
 
     private final JFrame menuReservacion;
-    private final BaseDeDatosTemporal db;
     private final ServicioCliente servicioCliente;
 
     private static final String PAIS = "País";
@@ -31,18 +30,16 @@ public class RegistroCliente extends JFrame {
     private final JTextField apellidos = new JTextField(20);
     private final JTextField identificacion = new JTextField(10);
 
-    public RegistroCliente(BaseDeDatosTemporal db, JFrame menuReservacion) {
+    public RegistroCliente(JFrame menuReservacion) throws Exception {
         super("Nuevo Cliente");
-
-        this.db = db;
         this.menuReservacion = menuReservacion;
-        this.servicioCliente = new ServicioClienteImpl(db);
+        this.servicioCliente = new ServicioClienteImpl();
 
         configurarInterfaz();
     }
 
     private void configurarInterfaz() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 210);
         setLocationRelativeTo(null);
 
@@ -78,12 +75,20 @@ public class RegistroCliente extends JFrame {
         JButton agregar = new JButton("Registrar");
         agregar.addActionListener(event -> {
             if (validarEntradas()) {
-                Cliente cliente = servicioCliente.crear(new Cliente(null, this.nombre.getText(), this.apellidos.getText(),
-                        this.pais.getText(), Integer.parseInt(this.edad.getText()),
-                        this.identificacion.getText()));
-                this.dispose();
-                confirmarRegistro(cliente);
-                menuReservacion.setVisible(true);
+                try {
+                    Cliente cliente = servicioCliente.crear(new Cliente(null, this.nombre.getText(), this.apellidos.getText(),
+                            this.pais.getText(), Integer.parseInt(this.edad.getText()),
+                            this.identificacion.getText()));
+
+                    this.dispose();
+                    confirmarRegistro(cliente);
+                    this.setVisible(false);
+                    menuReservacion.setVisible(true);
+                } catch (ErrorConexionBaseDeDatos ex) {
+                    this.dispose();
+                    JOptionPane.showMessageDialog(this, "Error registrando nuevo cliente. Por favor intentelo de nuevo mas tarde",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

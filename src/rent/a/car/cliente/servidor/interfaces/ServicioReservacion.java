@@ -5,6 +5,7 @@
 package rent.a.car.cliente.servidor.interfaces;
 
 import java.util.Optional;
+import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 import rent.a.car.cliente.servidor.excepciones.ReservacionInexistente;
 import rent.a.car.cliente.servidor.modelos.Reservacion;
 
@@ -20,8 +21,10 @@ public interface ServicioReservacion {
      * @param reservacion La reservacion a crear
      * @return La reservacion creada
      * @throws IllegalArgumentException Si la reservacion dada es invalida
+     * @throws ErrorConexionBaseDeDatos Si ocurre un error al conectarse con la
+     * base de datos
      */
-    public Reservacion crear(Reservacion reservacion) throws IllegalArgumentException;
+    public Reservacion crear(Reservacion reservacion) throws IllegalArgumentException, ErrorConexionBaseDeDatos;
 
     /**
      * Consulta una reservacion existente
@@ -30,8 +33,10 @@ public interface ServicioReservacion {
      * @return Optional con un valor presente si existe una reservacion con el
      * ID dado
      * @throws IllegalArgumentException Si el ID dado es menor o igual a cero
+     * @throws ErrorConexionBaseDeDatos Si ocurre un error al conectarse con la
+     * base de datos
      */
-    public Optional<Reservacion> consultar(int id) throws IllegalArgumentException;
+    public Optional<Reservacion> consultar(int id) throws IllegalArgumentException, ErrorConexionBaseDeDatos;
 
     /**
      * Actualiza la reservacion dada con nuevos datos
