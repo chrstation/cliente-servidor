@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package rent.a.car.cliente.servidor.interfaces;
 
 import java.util.List;
@@ -10,10 +6,6 @@ import rent.a.car.cliente.servidor.excepciones.ClienteInexistente;
 import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 import rent.a.car.cliente.servidor.modelos.Cliente;
 
-/**
- *
- * @author daniel.guzman
- */
 public interface ServicioCliente {
 
     /**
@@ -32,11 +24,13 @@ public interface ServicioCliente {
      * Consulta una cliente existente
      *
      * @param id ID de el cliente a consultar
-     * @return Optional con un valor presente si existe una cliente con el ID
+     * @return Optional con un valor presente si existe un cliente con el ID
      * dado
      * @throws IllegalArgumentException Si el ID dado es menor o igual a cero
+     * @throws ErrorConexionBaseDeDatos Si ocurre un error al conectarse con la
+     * base de datos
      */
-    public Optional<Cliente> consultar(int id) throws IllegalArgumentException;
+    public Optional<Cliente> consultar(int id) throws IllegalArgumentException, ErrorConexionBaseDeDatos;
 
     /**
      * Consulta la lista de clientes registrados en la base de datos

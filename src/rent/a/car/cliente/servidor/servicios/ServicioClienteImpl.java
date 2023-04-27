@@ -14,10 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import rent.a.car.cliente.servidor.excepciones.ErrorConexionBaseDeDatos;
 
-/**
- *
- * @author Charlie
- */
 public class ServicioClienteImpl implements ServicioCliente {
 
     public ServicioClienteImpl() {
@@ -53,8 +49,30 @@ public class ServicioClienteImpl implements ServicioCliente {
     }
 
     @Override
-    public Optional<Cliente> consultar(int id) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Optional<Cliente> consultar(int id) throws IllegalArgumentException, ErrorConexionBaseDeDatos {
+        if (id > 0) {
+            try (Connection conexionDb = BaseDeDatos.getConexion()) {
+                Optional<Cliente> cliente = Optional.empty();
+                String sql = " SELECT * FROM rent_a_car.cliente WHERE id = ?";
+
+                PreparedStatement preparedStatement = conexionDb.prepareStatement(sql);
+                preparedStatement.setInt(1, id);
+
+                ResultSet rs = preparedStatement.executeQuery();
+                if (rs.next()) {
+                    cliente = Optional.of(new Cliente(rs.getInt("id"), rs.getString("nombre"),
+                            rs.getString("apellido"), rs.getString("pais"),
+                            rs.getInt("edad"), rs.getString("identificacion")));
+                }
+
+                return cliente;
+            } catch (ClassNotFoundException | SQLException ex) {
+                System.err.println("Error consultando cliente: " + ex.getMessage());
+                throw new ErrorConexionBaseDeDatos(ex.getMessage(), ex);
+            }
+        } else {
+            throw new IllegalArgumentException("ID Cliente invalido");
+        }
     }
 
     @Override

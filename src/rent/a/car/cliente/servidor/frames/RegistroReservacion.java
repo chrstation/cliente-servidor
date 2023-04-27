@@ -28,7 +28,7 @@ import rent.a.car.cliente.servidor.util.StringUtil;
  */
 public class RegistroReservacion extends JFrame {
 
-    private static final int MONTO_SEGURO = 10000;
+    public static final int MONTO_SEGURO = 10000;
     private static final String NO_HAY_VEHICULOS_DEFAULT = "No hay vehiculos disponibles";
 
     private final Cliente cliente;
@@ -180,8 +180,8 @@ public class RegistroReservacion extends JFrame {
             this.dispose();
 
             try {
-                servicioReservacion.crear(new Reservacion(null, dias, costo, vehiculo.getId(), cliente.getId()));
-                JOptionPane.showMessageDialog(this, "Reservacion registrada exitosamente",
+                Reservacion reservacion = servicioReservacion.crear(new Reservacion(null, dias, costo, vehiculo.getId(), cliente.getId()));
+                JOptionPane.showMessageDialog(this, String.format("Reservacion %d registrada exitosamente", reservacion.getId()),
                         "Reservacion registrada", JOptionPane.INFORMATION_MESSAGE);
             } catch (IllegalArgumentException | ErrorConexionBaseDeDatos ex) {
                 System.err.println("Error registrando reservacion. Mensaje: " + ex.getMessage());

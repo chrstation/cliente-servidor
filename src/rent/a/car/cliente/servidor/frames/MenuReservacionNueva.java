@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package rent.a.car.cliente.servidor.frames;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,7 +16,7 @@ import rent.a.car.cliente.servidor.servicios.ServicioClienteImpl;
  *
  * @author daniel.guzman
  */
-public class MenuReservacion extends JFrame {
+public class MenuReservacionNueva extends JFrame {
 
     private static final String NO_HAY_CLIENTES_DEFAULT = "No hay clientes registrados";
 
@@ -29,7 +24,7 @@ public class MenuReservacion extends JFrame {
     private final JFrame menuPrincipal;
     private final ServicioCliente servicioCliente;
 
-    public MenuReservacion(JFrame menuPrincipal) throws ErrorConexionBaseDeDatos {
+    public MenuReservacionNueva(JFrame menuPrincipal) throws ErrorConexionBaseDeDatos {
         this.menuPrincipal = menuPrincipal;
         this.servicioCliente = new ServicioClienteImpl();
         configurarInterfaz();
@@ -68,8 +63,7 @@ public class MenuReservacion extends JFrame {
     private void nuevoClienteActionListener(JButton nuevoCliente) {
         nuevoCliente.addActionListener(event -> {
             try {
-                RegistroCliente menuCliente = new RegistroCliente(this
-                );
+                RegistroCliente menuCliente = new RegistroCliente(this);
                 menuCliente.setVisible(true);
             } catch (Exception ex) {
                 System.err.println(String.format("%s abriendo pantall de registro de cliente. Mensaje: %s", ex.getClass().getName(), ex.getMessage()));
