@@ -54,7 +54,7 @@ public class MenuPrincipal extends JFrame {
     private void nuevoAlquilerActionListener(JButton nuevoAlquiler) {
         nuevoAlquiler.addActionListener(e -> {
             try {
-                MenuReservacion menuReservacion = new MenuReservacion(this);
+                MenuReservacionNueva menuReservacion = new MenuReservacionNueva(this);
                 menuReservacion.setVisible(true);
                 this.setVisible(false);
             } catch (ErrorConexionBaseDeDatos ex) {
@@ -66,33 +66,16 @@ public class MenuPrincipal extends JFrame {
     }
 
     private void reservaExistenteActionListener(JButton reservaExistente) {
-
         reservaExistente.addActionListener(e -> {
-            int respuesta = Integer.parseInt(JOptionPane.showInputDialog("Por favor elija de las opciones a continuacion:\n\n"
-                    + "1. Devolucion de vehículo\n"
-                    + "2. Eliminar Reservación\n"
-                    + "3. Modificar Reservación\n"
-                    + "4. Salir al menú principal\n"));
-
-            switch (respuesta) {
-                case 1:
-                    throw new UnsupportedOperationException("No implementado");
-
-                case 2:
-                    throw new UnsupportedOperationException("No implementado");
-
-                case 3:
-                    throw new UnsupportedOperationException("No implementado");
-
-                case 4:
-                    dispose();
-                    break;
-
-                default:
-                    JOptionPane.showMessageDialog(null, "Opcion no valida");
-                    break;
+            try {
+                this.setVisible(false);
+                MenuReservacionExistente menuReservacionExistente = new MenuReservacionExistente(this);
+                menuReservacionExistente.setVisible(true);
+            } catch (ErrorConexionBaseDeDatos ex) {
+                System.err.println("Error configurando pantalla menu reservacion. Mensaje: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error configurando menu de reservacion existente, por favor intentelo mas tarde",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
-
         });
     }
 
